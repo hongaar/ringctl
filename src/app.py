@@ -3,8 +3,9 @@
 import signal
 import sys
 import time
-from strip import Strip
 
+from strip import Strip
+from timedCounter import TimedCounter
 
 
 # SIGINT handler
@@ -19,18 +20,17 @@ def signal_handler(signal, frame):
 # App
 ################################################################################
 class App:
-    TICK_SEC = 1
-
-
-    def __init__(self):
+    def __init__(self, frequency: int):
+        self.frequency = frequency
         self.strip = Strip()
+        self.timedCounter = TimedCounter(interval=0.1, n=1)
 
 
     def run(self):
         while True:
-            self.strip.color("red")
-            print("tick")
-            time.sleep(self.TICK_SEC)
+            # self.strip.color("red")
+            print("From timedCounter: " + str(self.timedCounter.get()))
+            time.sleep(1 / self.frequency)
 
 
     def shutdown(self):
@@ -42,5 +42,5 @@ if __name__ == '__main__':
 
     # Run app
     ############################################################################
-    app = App()
+    app = App(frequency=10)
     app.run()
