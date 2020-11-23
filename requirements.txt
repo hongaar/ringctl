@@ -1,0 +1,5 @@
+adafruit-circuitpython-neopixel~=6.0.0
+adafruit-circuitpython-mcp3xxx~=1.4.2
+rpi_ws281x~=4.2.5
+Colr~=0.9.1
+python-rtmidi~=1.4.6
