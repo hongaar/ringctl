@@ -1,8 +1,8 @@
 from parameters.parameter import Parameter
-from utils.variable import Variable
+from utils.any import Any
 
 
-class Color(Variable):
+class Color(Any):
     def __init__(self, red: Parameter, green: Parameter, blue: Parameter, brightness: Parameter):
         self.__red = red
         self.__green = green

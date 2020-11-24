@@ -6,10 +6,13 @@ from utils.number import Number
 
 
 class Parameter(Number):
-    def __init__(self, vmin: float = 0, vmax: float = 1, initial: float = 0):
+    def __init__(self, vmin: float = 0, vmax: float = 1, initial: float = 0, invert=False):
         self.vmin = vmin
         self.vmax = vmax
+        self.__invert = invert
         super().set(initial)
 
     def get(self):
-        return super().get() * (self.vmax - self.vmin) + self.vmin
+        v = super().get()
+        p = 1 - v if self.__invert else v
+        return p * (self.vmax - self.vmin) + self.vmin

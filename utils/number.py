@@ -1,4 +1,7 @@
-class Number:
+from utils.variable import Variable
+
+
+class Number(Variable):
     __value: float = 0
 
     def set(self, value: float):

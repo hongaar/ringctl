@@ -11,7 +11,7 @@ from outputs import strip
 
 # SIGINT handler
 ################################################################################
-from outputs.strip.effects.chase import Chase
+from outputs.strip.effects.flood import Chase
 from parameters.parameter import Parameter
 
 

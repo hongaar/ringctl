@@ -1,8 +1,11 @@
-class Variable:
-    __value = None
+from abc import ABC, abstractmethod
 
+
+class Variable(ABC):
+    @abstractmethod
     def set(self, value):
-        self.__value = value
+        pass
 
+    @abstractmethod
     def get(self):
-        return self.__value
+        pass
