@@ -1,4 +1,5 @@
 from outputs.strip.strip import Strip
+from parameters.color import Color
 from parameters.parameter import Parameter
 
 
@@ -6,14 +7,11 @@ class Chase:
     __tick_counter = 0
     __current_index = 0
 
-    def __init__(self, strip: Strip, speed: Parameter, gap: Parameter, red: Parameter,
-                 green: Parameter, blue: Parameter):
+    def __init__(self, strip: Strip, speed: Parameter, gap: Parameter, color: Color):
         self.__strip = strip
         self.__speed = speed
         self.__gap = gap
-        self.__red = red
-        self.__green = green
-        self.__blue = blue
+        self.__color = color
 
     def tick(self):
         speed = self.__speed.get()
@@ -28,11 +26,9 @@ class Chase:
     def step(self):
         gap = int(self.__gap.get())
         for i in range(0, self.__strip.pixels, gap):
-            self.__strip.pixel(i + self.__current_index, int(self.__red.get()),
-                               int(self.__green.get()), int(self.__blue.get()))
+            self.__strip.pixel(i + self.__current_index, *self.__color.get())
         self.__strip.render()
-        for i in range(0, self.__strip.pixels, gap):
-            self.__strip.pixel(i + self.__current_index, 0, 0, 0)
+        self.__strip.off()
         self.__current_index += 1
         if self.__current_index >= gap:
             self.__current_index = 0

@@ -6,9 +6,10 @@ from utils.number import Number
 
 
 class Input(Number):
-    def __init__(self, vmin: float = 0, vmax: float = 1):
+    def __init__(self, initial: float = 0, vmin: float = 0, vmax: float = 1):
         self.vmin = vmin
         self.vmax = vmax
+        self.set(initial)
 
     def set(self, value: float):
         # Limit value to vmin and vmax

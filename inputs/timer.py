@@ -5,10 +5,10 @@ from utils.number import Number
 
 
 class Timer(Number):
-    def __init__(self, fn: Callable[..., float], interval: float = 1, *args):
+    def __init__(self, interval: float, fn: Callable[..., float], *args):
+        self.interval = interval
         self.fn = fn
         self.args = args
-        self.interval = interval
         self.__create_timer()
 
     def __create_timer(self):

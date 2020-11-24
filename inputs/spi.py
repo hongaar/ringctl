@@ -20,5 +20,5 @@ class SPI(Input):
         self.__channel = AnalogIn(self.__mcp, pin)
 
     def get(self):
-        super().set(self.__channel.voltage)
+        super().set()
         return super().get()

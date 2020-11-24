@@ -1,3 +1,5 @@
+import math
+
 from colr import color
 
 from outputs.strip.renderer.renderer import Renderer
@@ -7,8 +9,15 @@ class Terminal(Renderer):
     def __init__(self, columns: int):
         self.columns = columns
 
-    def render(self, buffer: dict[int, tuple[int, int, int]]):
+    def render(self, buffer: list[tuple[int, int, int]]):
         chars = []
-        for i in range(self.columns):
-            chars.append(color('█', fore=buffer[i]))
-        print(''.join(chars), end='\r')
+        rows = math.floor(len(buffer) / self.columns)
+        for i, item in enumerate(buffer):
+            chars.append(color('█', fore=item))
+            if (i + 1) % self.columns == 0:
+                chars.append('\n')
+        # move to beginning of line
+        chars.append('\r')
+        # move up by number of rows
+        chars.append('\033[A' * rows)
+        print(''.join(chars), end='')

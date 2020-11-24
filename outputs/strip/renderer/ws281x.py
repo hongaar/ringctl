@@ -24,7 +24,7 @@ class Ws281x(Renderer):
         )
         self.__strip.begin()
 
-    def render(self, buffer: dict[int, tuple[int, int, int]]):
+    def render(self, buffer: list[tuple[int, int, int]]):
         for i, color in enumerate(buffer):
             self.__strip.setPixelColor(i, Color(*color))
         self.__strip.show()
