@@ -1,3 +1,4 @@
+from outputs.strip.buffer import Buffer
 from outputs.strip.effects.effect import Effect
 from parameters.color import Color
 from parameters.parameter import Parameter
@@ -26,11 +27,11 @@ class Chase(Effect):
 
         return self.draw(canvas)
 
-    def draw(self, canvas: list[tuple[int, int, int]]):
+    def draw(self, canvas: Buffer):
         gap = int(self.__gap.get())
-        pixels = len(canvas)
+        pixels = canvas.length
         for i in range(0, pixels, gap):
             pos = i + self.__current_index
             if pos < pixels:
-                canvas[pos] = self.__color.get()
+                canvas.set(pos, self.__color.get())
         return canvas

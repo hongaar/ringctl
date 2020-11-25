@@ -13,6 +13,7 @@ from middleware.middleware import Middleware
 from outputs.strip.canvas import Canvas
 from outputs.strip.effects.chase import Chase
 from outputs.strip.effects.flood import Flood
+from outputs.strip.effects.shadow import Shadow
 from outputs.strip.renderer.terminal import Terminal
 from parameters.color import Color
 from parameters.parameter import Parameter
@@ -37,10 +38,14 @@ class App:
 
         # Dimensions
         terminal_size = os.get_terminal_size()
-        default_lines = terminal_size.lines - 1
-        default_columns = terminal_size.columns
-        lines = int(input("Lines (" + str(default_lines) + "): ") or default_lines)
-        columns = int(input("Columns (" + str(default_columns) + "): ") or default_columns)
+        if len(sys.argv) == 3:
+            lines = int(sys.argv[1])
+            columns = int(sys.argv[2])
+        else:
+            default_lines = terminal_size.lines - 1
+            default_columns = terminal_size.columns
+            lines = int(input("Lines (" + str(default_lines) + "): ") or default_lines)
+            columns = int(input("Columns (" + str(default_columns) + "): ") or default_columns)
 
         # Parameters
         chase_speed = Parameter(vmax=1)
@@ -51,6 +56,7 @@ class App:
         brightness = Parameter(vmin=0, vmax=1)
         color = Color(red=red, green=green, blue=blue, brightness=brightness)
         pulse_period = Parameter(vmin=0.01, vmax=10, invert=True)
+        shadow_tail = Parameter(vmin=3, vmax=20)
 
         # Inputs
         midi_port = MidiPort()
@@ -60,6 +66,7 @@ class App:
         slider4 = MidiRange(port=midi_port, initial=63, channel=3)
         slider5 = MidiRange(port=midi_port, initial=63, channel=4)
         slider6 = MidiRange(port=midi_port, initial=63, channel=5)
+        slider7 = MidiRange(port=midi_port, initial=63, channel=6)
         pulse_enabled = MidiToggle(port=midi_port, initial=False, channel=37)
         pulse = SineClock(sine=Sine(period=pulse_period))
 
@@ -73,15 +80,18 @@ class App:
         self.middleware.pipe_if_true(pulse_enabled, slider6, pulse_period)
         self.middleware.pipe_if_true(pulse_enabled, pulse, brightness)
         self.middleware.pipe_if_false(pulse_enabled, slider6, brightness)
+        self.middleware.pipe(slider7, shadow_tail)
 
         # Output
         self.canvas = Canvas(pixels=lines * columns, renderer=Terminal(columns=columns))
 
         chase = Chase(speed=chase_speed, gap=chase_gap, color=color)
         flood = Flood(color=Color(red=Constant(127), green=Constant(127), blue=Constant(255),
-                                  brightness=brightness))
+                                  brightness=Constant(.4)))
+        shadow = Shadow(tail_length=shadow_tail)
 
         self.canvas.add_layer(chase)
+        self.canvas.add_layer(shadow)
         self.canvas.add_layer(flood)
 
     def run(self):

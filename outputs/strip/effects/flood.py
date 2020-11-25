@@ -7,7 +7,7 @@ class Flood(Effect):
         self.__color = color
 
     def step(self, canvas, buffer):
-        pixels = len(canvas)
-        for i in range(0, pixels):
-            canvas[i] = self.__color.get()
+        pixels = canvas.length
+        for i in range(pixels):
+            canvas.set(i, self.__color.get())
         return canvas
